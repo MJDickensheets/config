@@ -33,8 +33,12 @@ set foldlevelstart=10 "open most folds by default
 set foldnestmax=10 "max fold nesting
 set foldmethod=indent "fold based on indent level
 
+""CURSORLINE""
+hi clear CursorLine
+hi CursorLine gui=underline cterm=underline
+
 ""TABS AND SPLITS""
-noremap <F7> gT 
+noremap <F7> gT
 noremap <F8> gt
 
 ""BACKUP, UNDO, SWP""
@@ -49,15 +53,15 @@ execute pathogen#infect()
 
 
 ""Colors""
+colorscheme gruvbox
 set background=light
-colorscheme badwolf
+hi Normal guibg=NONE ctermbg=NONE
+hi clear SignColumn
+hi clear VertSplit
 
 "LIGHTLINE CONFIG"
 set laststatus=2
 set noshowmode
-let g:lightline = {
-    \ 'colorscheme': 'jellybeans',
-    \ }
 
 "NERDTREE CONFIG"
 map <c-a> :NERDTreeToggle<Return>
@@ -65,12 +69,38 @@ map <c-a> :NERDTreeToggle<Return>
 ""ALE CONFIG""
 let g:ale_fixers = {
 \            '*': ['remove_trailing_lines', 'trim_whitespace'],
-\            'python': ['autopep8', 'isort']
+\            'python': ['black', 'isort'],
+\            'c': ['clang-format'],
+\            'cpp': ['clang-format'],
+\            'arduino': ['clang-format'],
+\            'html': ['prettier'],
+\            'typescript': ['prettier']
+\            }
+let g:ale_linters = {
+\            'c': ['clang'],
+\            'cpp': ['clang'],
+\            'arduino': ['clang'],
+\            'python': ['flake8'],
 \            }
 
-""SNIPPIT CONFIG"
-let g:UltiSnipsExpandTrigger="<F3>"
-let g:UltiSnipsJumpForwardTrigger="<F4>"
-let g:UltiSnipsJumpBackwardTrigger="<F2>"
-"" CUSTOM S2 ""
-noremap <F9> :read ~/S2/scratch/S2header.py<Return>
+""C/CPP Helpers""
+let include_dir = system('find $PWD -type d -name include -print')
+
+if include_dir != ""
+    let g:ale_c_clang_options="-I " . system('find $PWD -type d -name include -print')
+    let g:ale_cpp_clang_options="-I " . system('find $PWD -type d -name include -print')
+endif
+set path=$PWD/**
+
+
+"" AIRLINE""
+let g:airline_powerline_fonts = 1
+
+""CURSORLINE""
+hi clear CursorLine
+hi CursorLine gui=underline cterm=underline
+
+""Filetype specific""
+autocmd Filetype typescript setlocal tabstop=2 softtabstop=2 shiftwidth=2
+autocmd Filetype html setlocal tabstop=2 softtabstop=2 shiftwidth=2
+autocmd Filetype python setlocal tabstop=4 softtabstop=4 shiftwidth=4

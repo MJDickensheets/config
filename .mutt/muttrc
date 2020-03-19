@@ -1,0 +1,27 @@
+set imap_user=dickensheets@s2corporation.com
+set imap_pass=mygyxrfwhvrqhbpr
+set folder=imaps://outlook.office365.com/
+set spoolfile= +INBOX
+
+mailboxes = +INBOX
+
+set header_cache = ~/.cache/mutt
+set message_cachedir = "~/.cache/mutt"
+
+unset imap_passive
+
+set imap_keepalive = 300
+
+set mail_check = 120
+
+auto_view text/html image/png
+alternative_order text/plain text/enriched text/html
+
+set ssl_starttls = yes
+set smtp_authenticators = "login"
+set smtp_url=smtp://$imap_user:$imap_pass@smtp.office365.com:587
+set from="dickensheets@s2corporation.com"
+
+set mailcap_path = ~/.mutt/mailcap
+
+bind index G imap-fetch-mail
